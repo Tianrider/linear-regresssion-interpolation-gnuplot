@@ -98,6 +98,10 @@ gcc -o curve_fitting main.c -lm
     - Program akan menampilkan nilai Y yang diinterpolasi
     - Masukkan 'q' untuk keluar dari mode interpolasi
 
+## Contoh Output
+
+![picture 0](https://i.imgur.com/xdkIW1R.png)
+
 ## Catatan
 
 -   Plot akan disimpan sebagai file PNG
@@ -108,6 +112,6 @@ gcc -o curve_fitting main.c -lm
 
 Kelompok 8
 
--   [@](https://github.com/Tianrider)
--   [@](https://github.com/benedictaurel)
--   [@](https://github.com/JonathanKosasih18)
+-   [Christian Hadiwijaya](https://github.com/Tianrider)
+-   [Benedict Aurelius](https://github.com/benedictaurel)
+-   [Jonathan Kosasih](https://github.com/JonathanKosasih18)
