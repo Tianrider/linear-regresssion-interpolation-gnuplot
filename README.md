@@ -1,13 +1,18 @@
 # Linear Regression and Interpolation Calculator with GNUPlot display
 
-Program ini melakukan pencocokan kurva (regresi linear) dan interpolasi pada data dari file CSV.
+Program ini melakukan pencocokan kurva (regresi) dan interpolasi pada data dari file CSV.
 
 ## Fitur
 
 -   Membaca data dari file CSV dengan header
+-   Mendukung berbagai jenis regresi:
+    -   Regresi Linear (y = mx + b)
+    -   Regresi Polinomial (y = a₀ + a₁x + a₂x² + ... + aₙxⁿ)
+    -   Regresi Logistik (y = c/(1 + ae^(-bx)))
 -   Memilih kolom yang ingin diinterpolasi
 -   Menampilkan plot data dengan GNUPlot
 -   Menampilkan hasil interpolasi dari nilai x apapun
+-   Menampilkan nilai R-squared untuk mengevaluasi kualitas regresi
 
 ## Persyaratan
 
@@ -86,14 +91,20 @@ gcc -o curve_fitting main.c -lm
     - Sumbu X (variabel independen)
     - Sumbu Y (variabel dependen)
 
-5. Program akan menampilkan:
+5. Pilih jenis regresi yang diinginkan:
 
-    - Hasil analisis regresi linear
-    - Persamaan garis
+    - Linear: untuk data yang memiliki hubungan linear
+    - Polinomial: untuk data yang memiliki pola kurva
+    - Logistik: untuk data yang memiliki pola pertumbuhan terbatas
+
+6. Program akan menampilkan:
+
+    - Hasil analisis regresi
+    - Persamaan kurva
     - Nilai R-squared
     - Plot data yang disimpan sebagai 'plot.png'
 
-6. Untuk interpolasi:
+7. Untuk interpolasi:
     - Masukkan nilai X yang ingin diinterpolasi
     - Program akan menampilkan nilai Y yang diinterpolasi
     - Masukkan 'q' untuk keluar dari mode interpolasi

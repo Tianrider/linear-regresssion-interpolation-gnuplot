@@ -47,13 +47,50 @@ int main() {
         return 1;
     }
 
-    // Lakukan regresi linear
-    RegressionResult result = linearRegression(data, num_points);
+    // Pilih jenis regresi
+    int regression_type;
+    printf("\nPilih jenis regresi:\n");
+    printf("1. Linear\n");
+    printf("2. Polynomial\n");
+    printf("3. Logistic\n");
+    printf("Pilihan (1-3): ");
+    scanf("%d", &regression_type);
 
-    // Tampilkan hasil
-    printf("\nHasil Analisis Regresi:\n");
-    printf("Persamaan: y = %.2fx + %.2f\n", result.slope, result.intercept);
-    printf("R-squared: %.4f\n", result.r_squared);
+    RegressionResult result;
+    int degree = 1; // Default degree
+
+    if (regression_type == 1) {
+        result = linearRegression(data, num_points);
+
+        printf("\nHasil Analisis Regresi Linear:\n");
+        printf("Persamaan: y = %.4fx + %.4f\n", result.slope, result.intercept);
+        printf("R-squared: %.4f\n", result.r_squared);
+    } else if (regression_type == 2) {
+        do {
+            printf("\nMasukkan derajat polynomial (1-%d): ", MAX_POLY_DEGREE);
+            scanf("%d", &degree);
+        } while (degree < 1 || degree > MAX_POLY_DEGREE);
+
+        result = polynomialRegression(data, num_points, degree);
+
+        printf("\nHasil Analisis Regresi Polynomial:\n");
+        printf("Persamaan: y = ");
+        for (int i = 0; i <= degree; i++) {
+            if (i == 0) {
+                printf("%.4f", result.coefficients[i]);
+            } else {
+                printf(" + %.4fx^%d", result.coefficients[i], i);
+            }
+        }
+        printf("\nR-squared: %.4f\n", result.r_squared);
+    } else {
+        result = logisticRegression(data, num_points);
+
+        printf("\nHasil Analisis Regresi Logistic:\n");
+        printf("Persamaan: y = %.4f / (1 + %.4f * e^(-%.4f * x))\n",
+               result.c, result.a, result.b);
+        printf("R-squared: %.4f\n", result.r_squared);
+    }
 
     // Buat plot
     plotWithGNUPlot(data, num_points, &result);
@@ -64,7 +101,27 @@ int main() {
         double x;
         printf("\nMasukkan nilai %s untuk interpolasi (atau 'q' untuk keluar): ", columns[x_column].name);
         if (scanf(" %lf", &x) == 1) {
-            double y = interpolate(data, num_points, x);
+            double y;
+            double mean_x = 0;
+
+            switch (regression_type) {
+            case 1: // Linear
+                y = result.slope * x + result.intercept;
+                break;
+            case 2: // Polynomial
+                y = 0;
+                for (int i = 0; i <= degree; i++) {
+                    y += result.coefficients[i] * pow(x, i);
+                }
+                break;
+            case 3: // Logistic
+                for (int i = 0; i < num_points; i++) {
+                    mean_x += data[i].x;
+                }
+                mean_x /= num_points;
+                y = result.c / (1 + result.a * exp(-result.b * (x - mean_x)));
+                break;
+            }
             printf("Nilai %s yang diinterpolasi: %.2f\n", columns[y_column].name, y);
         } else {
             scanf(" %c", &choice);
@@ -73,9 +130,9 @@ int main() {
         }
     } while (1);
 
-    // Bersihkan memori
     freeData(data);
     free(columns);
+    freeRegressionResult(&result);
 
     return 0;
 }
